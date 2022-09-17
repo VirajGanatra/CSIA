@@ -1,11 +1,12 @@
 package com.example.ia_application.controllers;
 
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
 public class loginController {
     @FXML
-    private Label welcomeText;
+    private final Label welcomeText;
 
     public loginController(Label welcomeText) {
         this.welcomeText = welcomeText;
