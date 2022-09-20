@@ -9,7 +9,7 @@ public class loginController {
     private final Label welcomeText;
 
     public loginController() {
-        welcomeText = new Label("Welcome to the login page!");
+        welcomeText = new Label("Welcome to the login screen!");
     }
 
     public loginController(Label welcomeText) {
