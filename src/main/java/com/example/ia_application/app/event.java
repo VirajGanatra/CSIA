@@ -8,18 +8,18 @@ public class event {
     private String name;
     private String description;
     private int numBlocks;
-    private LocalDate date;
+    private LocalDate startDate;
     private LocalTime startTime;
     private LocalTime endTime;
 
     private Duration duration;
     public event(){}
 
-    public event(String name, String description, int numBlocks, LocalDate date, LocalTime startTime, LocalTime endTime) {
+    public event(String name, String description, int numBlocks, LocalDate startDate, LocalTime startTime, LocalTime endTime) {
         this.name = name;
         this.description = description;
         this.numBlocks = numBlocks;
-        this.date = date;
+        this.startDate = startDate;
         this.startTime = startTime;
         this.endTime = endTime;
         this.duration = Duration.between(startTime, endTime);
@@ -49,12 +49,12 @@ public class event {
         this.numBlocks = numBlocks;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
     public LocalTime getStartTime() {
@@ -80,4 +80,7 @@ public class event {
     public void setDuration(Duration duration) {
         this.duration = duration;
     }
+
+    public void addToCalendar(){}
+
 }

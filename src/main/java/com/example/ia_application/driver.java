@@ -12,8 +12,7 @@ public class driver extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/ia_application/login-view.fxml"));
-
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login-view1.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         stage.setTitle("Hello!");
         stage.setScene(scene);

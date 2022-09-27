@@ -4,25 +4,25 @@ package com.example.ia_application.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class loginController {
+public class registerController {
     @FXML
     private final Label welcomeText;
 
-    public loginController() {
+    public registerController() {
         welcomeText = new Label("Welcome to the login screen!");
     }
 
-    public loginController(Label welcomeText) {
+    public registerController(Label welcomeText) {
         this.welcomeText = welcomeText;
     }
 
     @FXML
-    protected void onLoginButtonClick() {
+    protected void onRegisterButtonClick() {
         welcomeText.setText("testing");
     }
 
     @FXML
-    protected void onRegisterButtonClick() {
+    protected void onCreateButtonClick() {
         welcomeText.setText("testing");
     }
 }
