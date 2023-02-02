@@ -25,6 +25,16 @@ public class event {
         this.duration = Duration.between(startTime, endTime);
     }
 
+    public event(String name, String description, int numBlocks, LocalDate startDate, LocalTime startTime, Duration duration) {
+        this.name = name;
+        this.description = description;
+        this.numBlocks = numBlocks;
+        this.startDate = startDate;
+        this.startTime = startTime;
+        this.duration = duration;
+        this.endTime = startTime.plus(duration);
+    }
+
     public String getName() {
         return name;
     }

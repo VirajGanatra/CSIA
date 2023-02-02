@@ -19,6 +19,13 @@ public class recurringEvent extends event{
         this.endDate = endDate;
     }
 
+    public recurringEvent(String name, String description, int numBlocks, LocalDate startDate, LocalTime startTime, Duration duration, int[] daysOfWeek, int[] weeksOfMonth, LocalDate endDate) {
+        super(name, description, numBlocks, startDate, startTime, duration);
+        this.daysOfWeek = daysOfWeek;
+        this.weeksOfMonth = weeksOfMonth;
+        this.endDate = endDate;
+    }
+
     public int[] getDaysOfWeek() {
         return daysOfWeek;
     }
