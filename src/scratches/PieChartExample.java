@@ -14,10 +14,14 @@ import javafx.scene.control.TextInputDialog;
 import java.util.Optional;
 
 public class PieChartExample extends Application {
+    Integer count = 0;
+    PieChart pieChart = new PieChart();
     @Override
     public void start(Stage stage) {
-        PieChart pieChart = new PieChart();
+
         Label label = new Label("Drag a sector onto the pie chart");
+        pieChart.setLabelsVisible(false);
+
 
         StackPane root = new StackPane();
         root.getChildren().addAll(pieChart, label);
@@ -52,12 +56,15 @@ public class PieChartExample extends Application {
                 Optional<String> result = dialog.showAndWait();
                 if (result.isPresent()) {
                     int percentage = Integer.parseInt(result.get());
-                    if (pieChart.getData().isEmpty()) {
-                        pieChart.getData().add(new PieChart.Data("Data 1", percentage));
-                        pieChart.getData().add(new PieChart.Data("Empty Space", 100 - percentage));
+                    if (pieChart.getData().size() > 0) {
+                        for (PieChart.Data data : pieChart.getData()) {
+                            pieChart.getData().add(new PieChart.Data("Data " + count.toString(), percentage));
+                            data.setPieValue(100*(100-percentage)/data.getPieValue());
+                        }
                     } else {
-                        pieChart.getData().add(new PieChart.Data(db.getString(), percentage));
+                        pieChart.getData().add(new PieChart.Data("Empty Space", 100));
                     }
+                    count++;
                     success = true;
                 }
             }
@@ -65,6 +72,16 @@ public class PieChartExample extends Application {
             event.consume();
         });
     }
+
+    public int sum(PieChart pieChart) {
+        int sum = 0;
+        for (PieChart.Data data : pieChart.getData()) {
+            sum += data.getPieValue();
+        }
+        return sum;
+    }
+
+
 
     public static void main(String[] args) {
         launch(args);

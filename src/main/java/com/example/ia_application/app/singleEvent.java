@@ -7,11 +7,11 @@ import java.time.Duration;
 public class singleEvent extends event{
     public singleEvent(){}
     public singleEvent(String name, String description, int numBlocks, LocalDate date, LocalTime startTime, LocalTime endTime) {
-        super(name, description, numBlocks, date, startTime, endTime);
+        super(name, description, date, startTime, endTime);
     }
 
     public singleEvent(String name, String description, int numBlocks, LocalDate date, LocalTime startTime, Duration duration) {
-        super(name, description, numBlocks, date, startTime, duration);
+        super(name, description, date, startTime, duration);
     }
 
 }

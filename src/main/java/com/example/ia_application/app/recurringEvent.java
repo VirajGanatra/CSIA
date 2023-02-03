@@ -13,14 +13,14 @@ public class recurringEvent extends event{
     public recurringEvent(){}
 
     public recurringEvent(String name, String description, int numBlocks, LocalDate startDate, LocalTime startTime, LocalTime endTime, int[] daysOfWeek, int[] weeksOfMonth, LocalDate endDate) {
-        super(name, description, numBlocks, startDate, startTime, endTime);
+        super(name, description, startDate, startTime, endTime);
         this.daysOfWeek = daysOfWeek;
         this.weeksOfMonth = weeksOfMonth;
         this.endDate = endDate;
     }
 
     public recurringEvent(String name, String description, int numBlocks, LocalDate startDate, LocalTime startTime, Duration duration, int[] daysOfWeek, int[] weeksOfMonth, LocalDate endDate) {
-        super(name, description, numBlocks, startDate, startTime, duration);
+        super(name, description, startDate, startTime, duration);
         this.daysOfWeek = daysOfWeek;
         this.weeksOfMonth = weeksOfMonth;
         this.endDate = endDate;
