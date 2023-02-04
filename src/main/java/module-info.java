@@ -10,4 +10,5 @@ module com.example.ia_application {
     exports com.example.ia_application.controllers;
     opens com.example.ia_application.controllers to javafx.fxml;
     exports com.example.ia_application;
+    exports com.example.ia_application.app;
 }

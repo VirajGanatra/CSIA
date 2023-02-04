@@ -14,11 +14,11 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ia_application.controllers.homeController">
    <children>
-      <StackPane layoutX="164.0" layoutY="117.0" prefHeight="242.0" prefWidth="271.0">
+      <StackPane fx:id="stack" layoutX="164.0" layoutY="117.0" prefHeight="242.0" prefWidth="271.0">
          <children>
-            <Circle fill="#1f93ff01" radius="100.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fx:id="cal" fill="#1f93ff01" radius="100.0" stroke="BLACK" strokeType="INSIDE" />
             <Pane fx:id="free" prefHeight="200.0" prefWidth="200.0" />
-            <Pane fx:id="fixed" onMouseDragOver="#addToCircle" prefHeight="200.0" prefWidth="200.0" />
+            <Pane fx:id="fixed" prefHeight="200.0" prefWidth="200.0" />
          </children>
       </StackPane>
       <MFXButton fx:id="addButton" layoutX="522.0" layoutY="55.0" onAction="#addEvent" text="Add" />
