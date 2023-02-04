@@ -3,11 +3,11 @@
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXPasswordField?>
 <?import io.github.palexdev.materialfx.controls.MFXTextField?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ia_application.controllers.loginController">
    <children>
@@ -15,16 +15,20 @@
          <center>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="50.0" BorderPane.alignment="CENTER">
                <children>
-                  <MFXTextField fx:id="username"/>
-                  <MFXPasswordField fx:id="password"/>
+                  <MFXTextField fx:id="username" />
+                  <MFXPasswordField fx:id="password" />
                </children>
             </VBox>
          </center>
          <bottom>
-            <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <HBox alignment="CENTER" prefHeight="35.0" prefWidth="249.0" spacing="140.0" BorderPane.alignment="CENTER">
                <children>
-                  <MFXButton onAction="#onLoginButtonClick" text="Login" />
+                  <MFXButton fx:id="registerButton" alignment="BOTTOM_RIGHT" onAction="#onRegisterButtonClick" text="Register" />
+                  <MFXButton fx:id="loginButton" alignment="BOTTOM_RIGHT" onAction="#onLoginButtonClick" text="Login" />
                </children>
+               <padding>
+                  <Insets top="20.0" />
+               </padding>
             </HBox>
          </bottom>
       </BorderPane>
