@@ -49,7 +49,7 @@ public class toDoItem {
         this.expectedTime = expectedTime;
     }
 
-    public boolean isImportanceFlag() {
+    public boolean getImportanceFlag() {
         return importanceFlag;
     }
 

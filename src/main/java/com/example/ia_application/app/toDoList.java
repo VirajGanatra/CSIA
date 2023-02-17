@@ -1,16 +1,17 @@
 package com.example.ia_application.app;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Queue;
 import java.sql.*;
 
 public class toDoList {
-    private Queue<toDoItem> toDoList;
+    private LinkedList<toDoItem> toDoList;
 
     public toDoList() {
     }
 
-    public toDoList(Queue<toDoItem> toDoList) {
+    public toDoList(LinkedList<toDoItem> toDoList) {
         this.toDoList = toDoList;
     }
 
@@ -39,11 +40,34 @@ public class toDoList {
     }
 
     public void sortToDoListDate(){
+    //sort via bubblesort
+        for (int i = 0; i < toDoList.size(); i++) {
+            for (int j = 0; j < toDoList.size() - i - 1; j++) {
+                if (toDoList.get(j).getDueDate().compareTo(toDoList.get(j + 1).getDueDate()) > 0 ) {
+                    toDoItem temp = toDoList.get(j);
+                    toDoList.set(j, toDoList.get(j + 1));
+                    toDoList.set(j + 1, temp);
+                }
+            }
+        }
 
     }
 
-    public void sortToDoListTime(){
-        //TODO
+
+
+    public void sortToDoListImportance(){
+        //sort via bubblesort, but with a double
+        for (int i = 0; i < toDoList.size(); i++) {
+            for (int j = 0; j < toDoList.size() - i - 1; j++) {
+                if (toDoList.get(j).getImportanceFlag() && !toDoList.get(j + 1).getImportanceFlag() || ( toDoList.get(j).getDueDate().compareTo(toDoList.get(j + 1).getDueDate()) > 0 && toDoList.get(j).getImportanceFlag() == toDoList.get(j + 1).getImportanceFlag() )) {
+                    toDoItem temp = toDoList.get(j);
+                    toDoList.set(j, toDoList.get(j + 1));
+                    toDoList.set(j + 1, temp);
+                }
+            }
+        }
+
+
     }
 
     Connection con;

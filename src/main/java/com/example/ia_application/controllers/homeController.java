@@ -1,20 +1,30 @@
 package com.example.ia_application.controllers;
 
+import com.example.ia_application.app.ArcWrapper;
 import com.example.ia_application.app.event;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import io.github.palexdev.materialfx.controls.MFXSlider;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 
 
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class homeController{
@@ -30,6 +40,9 @@ public class homeController{
     public MFXDatePicker datePicker;
     public StackPane stack;
     public Circle cal;
+    public ArcWrapper newArc;
+
+    Point2D circleCenter;
 
 
     public void initialize() {
@@ -72,7 +85,16 @@ public class homeController{
         arc.setOnMouseReleased((MouseEvent t) -> {
             arc.setMouseTransparent(true);
             if (insideCircle(arc)) {
-                System.out.println("inside");
+
+                ArcWrapper newArc = new ArcWrapper(free.getLayoutX() + circleCenter.getX(), free.getLayoutY() + circleCenter.getY(), cal.getRadius(), cal.getRadius(), 0, 60);
+                newArc.setFill(arc.getFill());
+                newArc.setType(ArcType.ROUND);
+                free.getChildren().add(newArc);
+                /*Arc test = new Arc(free.getLayoutX() + circleCenter.getX(), free.getLayoutY() + circleCenter.getY(), cal.getRadius(), cal.getRadius(), 100, 45);
+                test.setFill(Color.GREEN);
+                test.setType(ArcType.ROUND);
+                fixed.getChildren().add(test);*/
+                moveInside(newArc);
             }
             else {
                 System.out.println("outside");
@@ -93,17 +115,59 @@ public class homeController{
     }
 
 
-    public void addEvent(ActionEvent actionEvent) {
+    @FXML
+    protected void addEvent(ActionEvent event) throws IOException {
+        try {
+
+            Node node = (Node) event.getSource();
+            Stage stage = (Stage) node.getScene().getWindow();
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/ia_application/add-view.fxml"));
+            Parent root1 = (Parent) fxmlLoader.load();
+            stage.setScene(new Scene(root1));
+            stage.show();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean insideCircle(Arc arc){
 
         Point2D localArcCenter = stack.sceneToLocal(arc.localToScene(new Point2D(arc.getCenterX(), arc.getCenterY())));
         Point2D localCircleCenter = stack.sceneToLocal(cal.localToScene(new Point2D(cal.getCenterX(), cal.getCenterY())));
+        circleCenter = new Point2D(localCircleCenter.getX(), localCircleCenter.getY());
 
-        return localCircleCenter.distance(localArcCenter) + arc.getRadiusX() <= cal.getRadius();
+        return circleCenter.distance(localArcCenter) + arc.getRadiusX() <= cal.getRadius();
 
     }
+
+
+    public void moveInside(Arc arc) {
+        fixed.setMouseTransparent(true);
+        arc.setOnMouseClicked((MouseEvent t) -> {
+                    System.out.println("clicked");
+
+        });
+        arc.setOnMouseDragged((MouseEvent t1) -> {
+                double angle = Math.atan2(t1.getY() - cal.getCenterY(), t1.getX() - cal.getCenterX()) * 180 / Math.PI;
+                arc.setStartAngle(-angle - 30);
+        });
+
+        arc.setOnMouseReleased((MouseEvent t1) -> {
+            try {
+                //System.out.print(username.getText());
+                addDragController addDragController = new addDragController(this);
+                addDragController.show();
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+                fixed.setMouseTransparent(false);
+                moveInside(arc);
+        });
+
+
+        }
+
 
 
 }
