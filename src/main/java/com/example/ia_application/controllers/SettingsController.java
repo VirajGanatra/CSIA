@@ -1,17 +1,12 @@
 package com.example.ia_application.controllers;
 
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.beans.binding.Bindings;
 
 
-public class settingsController {
+public class SettingsController {
 
     public TabPane tabPane;
     public Tab t1;

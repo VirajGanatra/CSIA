@@ -3,7 +3,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class event {
+public class Event {
 
     private String name;
     private String description;
@@ -12,9 +12,9 @@ public class event {
     private LocalTime endTime;
 
     private Duration duration;
-    public event(){}
+    public Event(){}
 
-    public event(String name, String description, LocalDate startDate, LocalTime startTime, LocalTime endTime) {
+    public Event(String name, String description, LocalDate startDate, LocalTime startTime, LocalTime endTime) {
         this.name = name;
         this.description = description;
         this.startDate = startDate;
@@ -23,7 +23,7 @@ public class event {
         this.duration = Duration.between(startTime, endTime);
     }
 
-    public event(String name, String description, LocalDate startDate, LocalTime startTime, Duration duration) {
+    public Event(String name, String description, LocalDate startDate, LocalTime startTime, Duration duration) {
         this.name = name;
         this.description = description;
         this.startDate = startDate;
@@ -64,12 +64,20 @@ public class event {
         this.startTime = startTime;
     }
 
+    public void setStartTime(Duration duration) {
+        this.startTime = endTime.minus(duration);
+    }
+
     public LocalTime getEndTime() {
         return endTime;
     }
 
     public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
+    }
+
+    public void setEndTime(Duration duration) {
+        this.endTime = startTime.plus(duration);
     }
 
     public Duration getDuration() {
@@ -80,6 +88,21 @@ public class event {
         this.duration = duration;
     }
 
-    public void addToCalendar(){}
+    public void setDuration() {
+        this.duration = Duration.between(startTime, endTime);
+    }
+
+    public void addToDB(){
+
+    }
+
+    public void  printEvent(){
+        System.out.println("Name: " + name);
+        System.out.println("Description: " + description);
+        System.out.println("Start Date: " + startDate);
+        System.out.println("Start Time: " + startTime);
+        System.out.println("End Time: " + endTime);
+        System.out.println("Duration: " + duration);
+    }
 
 }

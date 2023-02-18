@@ -1,41 +1,39 @@
 package com.example.ia_application.app;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Queue;
 import java.sql.*;
 
-public class toDoList {
-    private LinkedList<toDoItem> toDoList;
+public class ToDoList {
+    private LinkedList<ToDoItem> toDoList;
 
-    public toDoList() {
+    public ToDoList() {
     }
 
-    public toDoList(LinkedList<toDoItem> toDoList) {
+    public ToDoList(LinkedList<ToDoItem> toDoList) {
         this.toDoList = toDoList;
     }
 
-    public void addToDoItem(toDoItem item){
+    public void addToDoItem(ToDoItem item){
         toDoList.add(item);
     }
 
-    public void removeToDoItem(toDoItem item){
+    public void removeToDoItem(ToDoItem item){
         toDoList.remove(item);
     }
 
-    public void markComplete(toDoItem item){
+    public void markComplete(ToDoItem item){
         item.setComplete(true);
     }
 
-    public void markIncomplete(toDoItem item){
+    public void markIncomplete(ToDoItem item){
         item.setComplete(false);
     }
 
-    public void markImportant(toDoItem item){
+    public void markImportant(ToDoItem item){
         item.setImportanceFlag(true);
     }
 
-    public void markUnimportant(toDoItem item){
+    public void markUnimportant(ToDoItem item){
         item.setImportanceFlag(false);
     }
 
@@ -44,7 +42,7 @@ public class toDoList {
         for (int i = 0; i < toDoList.size(); i++) {
             for (int j = 0; j < toDoList.size() - i - 1; j++) {
                 if (toDoList.get(j).getDueDate().compareTo(toDoList.get(j + 1).getDueDate()) > 0 ) {
-                    toDoItem temp = toDoList.get(j);
+                    ToDoItem temp = toDoList.get(j);
                     toDoList.set(j, toDoList.get(j + 1));
                     toDoList.set(j + 1, temp);
                 }
@@ -60,7 +58,7 @@ public class toDoList {
         for (int i = 0; i < toDoList.size(); i++) {
             for (int j = 0; j < toDoList.size() - i - 1; j++) {
                 if (toDoList.get(j).getImportanceFlag() && !toDoList.get(j + 1).getImportanceFlag() || ( toDoList.get(j).getDueDate().compareTo(toDoList.get(j + 1).getDueDate()) > 0 && toDoList.get(j).getImportanceFlag() == toDoList.get(j + 1).getImportanceFlag() )) {
-                    toDoItem temp = toDoList.get(j);
+                    ToDoItem temp = toDoList.get(j);
                     toDoList.set(j, toDoList.get(j + 1));
                     toDoList.set(j + 1, temp);
                 }

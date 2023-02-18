@@ -3,7 +3,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class toDoItem {
+public class ToDoItem {
     private String name;
     private String description;
     private  Duration expectedTime;
@@ -12,7 +12,7 @@ public class toDoItem {
     private String category;
     private LocalDate dueDate;
 
-    public toDoItem(String name, String description, Duration expectedTime, boolean importanceFlag, boolean isComplete, String category, LocalDate dueDate) {
+    public ToDoItem(String name, String description, Duration expectedTime, boolean importanceFlag, boolean isComplete, String category, LocalDate dueDate) {
         this.name = name;
         this.description = description;
         this.expectedTime = expectedTime;
@@ -22,7 +22,7 @@ public class toDoItem {
         this.dueDate = dueDate;
     }
 
-    public toDoItem() {
+    public ToDoItem() {
     }
 
     public String getName() {
@@ -85,8 +85,8 @@ public class toDoItem {
         return LocalDateTime.now();
     }
 
-    public singleEvent Event(){
-        return new singleEvent();
+    public SingleEvent Event(){
+        return new SingleEvent();
     }
 }
 

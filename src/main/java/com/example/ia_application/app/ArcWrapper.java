@@ -4,10 +4,10 @@ import javafx.scene.shape.Arc;
 
 public class ArcWrapper extends Arc {
 
-    private event event;
+    private Event event;
 
     public ArcWrapper(double centerX, double centerY, double radiusX, double radiusY,
-                    double startAngle, double length, event event) {
+                    double startAngle, double length, Event event) {
         super(centerX, centerY, radiusX, radiusY, startAngle, length);
         this.event = event;
     }
@@ -17,11 +17,11 @@ public class ArcWrapper extends Arc {
         super(centerX, centerY, radiusX, radiusY, startAngle, length);
     }
 
-    public event getEvent() {
+    public Event getEvent() {
         return event;
     }
 
-    public void setEvent(event event) {
+    public void setEvent(Event event) {
         this.event = event;
     }
 }

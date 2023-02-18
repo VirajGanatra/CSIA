@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ia_application.controllers.addController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
@@ -30,13 +30,13 @@
                   <MFXComboBox fx:id="startM" floatMode="BORDER" promptText="Start Minute" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
                   <MFXComboBox fx:id="endH" floatMode="BORDER" promptText="End Hour" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <MFXComboBox fx:id="endM" floatMode="BORDER" promptText="End Minute" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-                  <MFXCheckbox fx:id="rec" alignment="CENTER_RIGHT" onAction="#recClick" text="Recurring" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
+                  <MFXCheckbox fx:id="rec" alignment="CENTER_RIGHT" text="Recurring" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="BOTTOM" />
                </children>
             </GridPane>
          </children>
       </Pane>
    </center>
    <bottom>
-      <MFXButton fx:id="add" onAction="#addClick" text="Add" BorderPane.alignment="CENTER" />
+      <MFXButton fx:id="add" text="Add" BorderPane.alignment="CENTER" />
    </bottom>
 </BorderPane>

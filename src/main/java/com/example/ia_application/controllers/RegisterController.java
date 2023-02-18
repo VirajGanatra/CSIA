@@ -4,15 +4,15 @@ package com.example.ia_application.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class registerController {
+public class RegisterController {
     @FXML
     private final Label welcomeText;
 
-    public registerController() {
+    public RegisterController() {
         welcomeText = new Label("Welcome to the login screen!");
     }
 
-    public registerController(Label welcomeText) {
+    public RegisterController(Label welcomeText) {
         this.welcomeText = welcomeText;
     }
 

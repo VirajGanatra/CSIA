@@ -1,4 +1,4 @@
 package com.example.ia_application.controllers;
 
-public class toDoController {
+public class ToDoController {
 }

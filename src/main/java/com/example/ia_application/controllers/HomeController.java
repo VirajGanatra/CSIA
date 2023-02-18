@@ -1,7 +1,8 @@
 package com.example.ia_application.controllers;
 
 import com.example.ia_application.app.ArcWrapper;
-import com.example.ia_application.app.event;
+import com.example.ia_application.app.Event;
+import com.example.ia_application.driver;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import io.github.palexdev.materialfx.controls.MFXSlider;
@@ -12,12 +13,9 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Circle;
@@ -25,9 +23,11 @@ import javafx.stage.Stage;
 
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class homeController{
+public class HomeController {
     public Pane free;
     public Pane fixed;
     public MFXButton addButton;
@@ -41,16 +41,17 @@ public class homeController{
     public StackPane stack;
     public Circle cal;
     public ArcWrapper newArc;
+    public Event currentEvent;
 
     Point2D circleCenter;
 
 
     public void initialize() {
-
+            datePicker.setValue(datePicker.getCurrentDate());
             makeArcDraggable(arc15);
             makeArcDraggable(arc1);
             makeArcDraggable(arc5);
-
+            
 
     }
 
@@ -118,14 +119,8 @@ public class homeController{
     @FXML
     protected void addEvent(ActionEvent event) throws IOException {
         try {
-
-            Node node = (Node) event.getSource();
-            Stage stage = (Stage) node.getScene().getWindow();
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/ia_application/add-view.fxml"));
-            Parent root1 = (Parent) fxmlLoader.load();
-            stage.setScene(new Scene(root1));
-            stage.show();
-
+            AddController addController = new AddController(this);
+            addController.show();
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -155,8 +150,10 @@ public class homeController{
 
         arc.setOnMouseReleased((MouseEvent t1) -> {
             try {
-                //System.out.print(username.getText());
-                addDragController addDragController = new addDragController(this);
+                currentEvent = new Event();
+                currentEvent.setStartTime(LocalTime.MIDNIGHT.plusMinutes((long) ((long) arc.getStartAngle() * 0.25)));
+                currentEvent.setDuration(Duration.ofMinutes((long) (arc.getLength() * 0.25)));
+                AddDragController addDragController = new AddDragController(this, currentEvent);
                 addDragController.show();
             } catch(Exception e) {
                 e.printStackTrace();

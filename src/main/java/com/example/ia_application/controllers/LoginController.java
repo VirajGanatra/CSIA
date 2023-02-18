@@ -1,26 +1,22 @@
 package com.example.ia_application.controllers;
 
 
+import com.example.ia_application.driver;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.controls.MFXPasswordField;
 
-public class loginController{
+public class LoginController {
     @FXML
     private final Label welcomeText;
     public MFXButton registerButton;
@@ -34,11 +30,11 @@ public class loginController{
     private MFXPasswordField password;
 
 
-    public loginController() {
+    public LoginController() {
         welcomeText = new Label("Welcome to the login screen!");
     }
 
-    public loginController(Label welcomeText) {
+    public LoginController(Label welcomeText) {
         this.welcomeText = welcomeText;
     }
 
@@ -51,6 +47,7 @@ public class loginController{
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/ia_application/home-view.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             stage.setScene(new Scene(root1));
+            driver.sceneStack.pushScene(stage.getScene());
             stage.show();
         } catch(Exception e) {
             e.printStackTrace();
@@ -67,6 +64,7 @@ public class loginController{
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/example/ia_application/register-view.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             stage.setScene(new Scene(root1));
+            driver.sceneStack.pushScene(stage.getScene());
             stage.show();
         } catch(Exception e) {
             e.printStackTrace();
