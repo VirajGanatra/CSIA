@@ -2,7 +2,7 @@ package com.example.ia_application.controllers;
 
 
 import com.example.ia_application.app.SingleEvent;
-import com.example.ia_application.driver;
+import com.example.ia_application.Driver;
 import com.example.ia_application.defaults.Template;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXCheckbox;
@@ -28,7 +28,7 @@ public class AddController {
     public MFXComboBox<Integer> endM;
     public MFXCheckbox rec;
     public MFXButton add;
-    private final HomeController homeController;
+    final HomeController homeController;
 
 
     public AddController(HomeController homeController){
@@ -39,7 +39,7 @@ public class AddController {
             fxmlLoader.setLocation(getClass().getResource("/com/example/ia_application/add-view.fxml"));
             fxmlLoader.setController(this);
             stage.setScene(new Scene(fxmlLoader.load()));
-            driver.sceneStack.pushScene(stage.getScene());
+            Driver.sceneStack.pushScene(stage.getScene());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -52,16 +52,12 @@ public class AddController {
         startM.setItems(minutes);
         endH.setItems(hours);
         endM.setItems(minutes);
-
-
-
-        add.setOnAction(this::addClick);
-        rec.setOnAction(this::recClick);
+        add.setOnAction(this::addClick); //this is the same as add.setOnAction(e -> addClick(e));
+        rec.setOnAction(this::recClick); //these are method references; sometimes easier to see what is happening
 
     }
 
-    public void recClick(ActionEvent actionEvent) {
-    }
+    public void show() {stage.showAndWait();}
 
     public void addClick(ActionEvent actionEvent) {
         SingleEvent currentEvent = new SingleEvent();
@@ -73,10 +69,20 @@ public class AddController {
         currentEvent.setDuration();
         currentEvent.setStartDate(homeController.datePicker.getValue());
         currentEvent.addToDB();
+
+        Driver.sceneStack.popScene();
+        stage.setScene(Driver.sceneStack.peekScene());
     }
 
-    public void show() {
-        stage.showAndWait();
+    public void recClick(ActionEvent actionEvent) {
+        try{
+            AddRecController addRecController = new AddRecController(this);
+            addRecController.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
+
 
 }

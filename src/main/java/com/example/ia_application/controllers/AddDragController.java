@@ -1,7 +1,7 @@
 package com.example.ia_application.controllers;
 
 import com.example.ia_application.app.Event;
-import com.example.ia_application.driver;
+import com.example.ia_application.Driver;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import javafx.event.ActionEvent;
@@ -27,7 +27,7 @@ public class AddDragController {
             fxmlLoader.setLocation(getClass().getResource("/com/example/ia_application/addDrag-view.fxml"));
             fxmlLoader.setController(this);
             stage.setScene(new Scene(fxmlLoader.load()));
-            driver.sceneStack.pushScene(stage.getScene());
+            Driver.sceneStack.pushScene(stage.getScene());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -45,14 +45,14 @@ public class AddDragController {
         currentEvent.setEndTime(currentEvent.getStartTime());
         currentEvent.printEvent();
 
-        //returnHome();
+        returnHome();
     }
 
 
 
     public void returnHome() {
-        driver.sceneStack.popScene();
-        stage.setScene(driver.sceneStack.getScene());
+        Driver.sceneStack.popScene();
+        stage.setScene(Driver.sceneStack.peekScene());
 
     }
 

@@ -4,7 +4,7 @@ package com.example.ia_application.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class RegisterController {
+public class RegisterController{
     @FXML
     private final Label welcomeText;
 

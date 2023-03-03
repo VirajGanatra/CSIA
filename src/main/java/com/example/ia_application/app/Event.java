@@ -10,8 +10,8 @@ public class Event {
     private LocalDate startDate;
     private LocalTime startTime;
     private LocalTime endTime;
-
     private Duration duration;
+
     public Event(){}
 
     public Event(String name, String description, LocalDate startDate, LocalTime startTime, LocalTime endTime) {
@@ -92,9 +92,7 @@ public class Event {
         this.duration = Duration.between(startTime, endTime);
     }
 
-    public void addToDB(){
-
-    }
+    public void addToDB(){}
 
     public void  printEvent(){
         System.out.println("Name: " + name);
@@ -104,5 +102,7 @@ public class Event {
         System.out.println("End Time: " + endTime);
         System.out.println("Duration: " + duration);
     }
+
+
 
 }

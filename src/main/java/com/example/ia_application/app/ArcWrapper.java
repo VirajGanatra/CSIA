@@ -17,6 +17,19 @@ public class ArcWrapper extends Arc {
         super(centerX, centerY, radiusX, radiusY, startAngle, length);
     }
 
+    public ArcWrapper() {
+        super();
+    }
+
+    public ArcWrapper(Arc arc) {
+        super(arc.getCenterX(), arc.getCenterY(), arc.getRadiusX(), arc.getRadiusY(), arc.getStartAngle(), arc.getLength());
+    }
+
+    public ArcWrapper(Arc arc, Event event) {
+        super(arc.getCenterX(), arc.getCenterY(), arc.getRadiusX(), arc.getRadiusY(), arc.getStartAngle(), arc.getLength());
+        this.event = event;
+    }
+
     public Event getEvent() {
         return event;
     }

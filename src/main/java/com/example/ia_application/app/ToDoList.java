@@ -37,35 +37,46 @@ public class ToDoList {
         item.setImportanceFlag(false);
     }
 
-    public void sortToDoListDate(){
-    //sort via bubblesort
-        for (int i = 0; i < toDoList.size(); i++) {
-            for (int j = 0; j < toDoList.size() - i - 1; j++) {
-                if (toDoList.get(j).getDueDate().compareTo(toDoList.get(j + 1).getDueDate()) > 0 ) {
-                    ToDoItem temp = toDoList.get(j);
-                    toDoList.set(j, toDoList.get(j + 1));
-                    toDoList.set(j + 1, temp);
-                }
-            }
-        }
+//    public void sortToDoListDate(){
+//    //sort via bubblesort
+//        for (int i = 0; i < toDoList.size(); i++) {
+//            for (int j = 0; j < toDoList.size() - i - 1; j++) {
+//                if (toDoList.get(j).getDueDate().compareTo(toDoList.get(j + 1).getDueDate()) > 0 ) {
+//                    ToDoItem temp = toDoList.get(j);
+//                    toDoList.set(j, toDoList.get(j + 1));
+//                    toDoList.set(j + 1, temp);
+//                }
+//            }
+//        }
+//    }
 
+    public void sortToDoListDate(){
+        //sort via insertion sort
+        for (int i = 1; i < toDoList.size(); i++) {
+            ToDoItem key = toDoList.get(i);
+            int j = i - 1;
+            while (j >= 0 && toDoList.get(j).getDueDate().compareTo(key.getDueDate()) > 0) {
+                toDoList.set(j + 1, toDoList.get(j));
+                j = j - 1;
+            }
+            toDoList.set(j + 1, key);
+        }
     }
 
-
-
     public void sortToDoListImportance(){
-        //sort via bubblesort, but with a double
+        //bubble sort with importance flag - if both are important, sort by date
         for (int i = 0; i < toDoList.size(); i++) {
+            boolean flag = false;
             for (int j = 0; j < toDoList.size() - i - 1; j++) {
-                if (toDoList.get(j).getImportanceFlag() && !toDoList.get(j + 1).getImportanceFlag() || ( toDoList.get(j).getDueDate().compareTo(toDoList.get(j + 1).getDueDate()) > 0 && toDoList.get(j).getImportanceFlag() == toDoList.get(j + 1).getImportanceFlag() )) {
+                if (toDoList.get(j).getImportanceFlag() && !toDoList.get(j + 1).getImportanceFlag() || ( toDoList.get(j).getDueDate().compareTo(toDoList.get(j + 1).getDueDate()) > 0 && toDoList.get(j).getImportanceFlag() == toDoList.get(j + 1).getImportanceFlag())) {
                     ToDoItem temp = toDoList.get(j);
                     toDoList.set(j, toDoList.get(j + 1));
                     toDoList.set(j + 1, temp);
+                    flag = true;
                 }
             }
+            if (!flag) { break; }
         }
-
-
     }
 
     Connection con;

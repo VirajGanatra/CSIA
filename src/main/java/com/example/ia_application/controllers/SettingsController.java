@@ -6,7 +6,7 @@ import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 
 
-public class SettingsController {
+public class SettingsController{
 
     public TabPane tabPane;
     public Tab t1;

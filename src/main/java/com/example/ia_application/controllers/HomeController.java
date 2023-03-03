@@ -2,32 +2,44 @@ package com.example.ia_application.controllers;
 
 import com.example.ia_application.app.ArcWrapper;
 import com.example.ia_application.app.Event;
-import com.example.ia_application.driver;
+import com.example.ia_application.app.SingleEvent;
+import com.example.ia_application.defaults.DBClass;
+import com.example.ia_application.Driver;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXDatePicker;
 import io.github.palexdev.materialfx.controls.MFXSlider;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class HomeController {
+    private final Stage stage;
+    private final com.example.ia_application.controllers.LoginController LoginController;
+
+
     public Pane free;
     public Pane fixed;
     public MFXButton addButton;
@@ -45,13 +57,88 @@ public class HomeController {
 
     Point2D circleCenter;
 
+    public HomeController(LoginController loginController){
+        this.LoginController = loginController;
+        this.stage = new Stage();
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/com/example/ia_application/home-view.fxml"));
+            fxmlLoader.setController(this);
+            stage.setScene(new Scene(fxmlLoader.load()));
+            Driver.sceneStack.pushScene(stage.getScene());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
 
     public void initialize() {
-            datePicker.setValue(datePicker.getCurrentDate());
-            makeArcDraggable(arc15);
-            makeArcDraggable(arc1);
-            makeArcDraggable(arc5);
-            
+
+        datePicker.setValue(LocalDate.now());
+
+        makeArcDraggable(arc15);
+        makeArcDraggable(arc1);
+        makeArcDraggable(arc5);
+
+//        stage.addEventHandler(WindowEvent.WINDOW_SHOWING, window -> {
+//            loadCalendar(datePicker.getValue());
+//        });
+
+        datePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            loadCalendar(datePicker.getValue());
+        });
+
+        addButton.setOnAction(this::addEvent);
+
+
+
+
+    }
+
+    public void show(){
+        stage.showAndWait();
+    }
+
+    public void loadCalendar(LocalDate date){
+        long value = date.toEpochDay();
+
+        String singleSQL = "SELECT * FROM single WHERE date = (?)";
+        try {
+            Connection connection = DBClass.connection;
+            PreparedStatement prst = connection.prepareStatement(singleSQL);
+            prst.setLong(1, value);
+            ResultSet resultSet = prst.executeQuery();
+            while (resultSet.next()){
+                String name = resultSet.getString("name");
+                String description = resultSet.getString("description");
+                String start = resultSet.getString("start time");
+                String end = resultSet.getString("end time");
+                LocalTime startTime = LocalTime.parse(start);
+                LocalTime endTime = LocalTime.parse(end);
+                Duration duration = Duration.between(startTime, endTime);
+                Event current = new SingleEvent(name, description, date, startTime, endTime);
+                double startAngle = (((double) startTime.toSecondOfDay() /60) * 0.25)+180;
+                double length = (double) duration.toMinutes() * 0.25;
+                Arc arctemp = new Arc(free.getLayoutX() + circleCenter.getX(), free.getLayoutY() + circleCenter.getY(), cal.getRadius(), cal.getRadius(), startAngle, length);
+                makeArcDraggable(arctemp);
+                ArcWrapper arc = new ArcWrapper(arctemp, current);
+                arc.setFill(Color.GREEN);
+                arc.setType(ArcType.ROUND);
+                free.getChildren().add(arc);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        /*String recurringSQL = "SELECT * FROM recurring WHERE date = (?)";
+        try (Connection connection = DBClass.connection; PreparedStatement prst = connection.prepareStatement(recurringSQL)){
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }*/
 
     }
 
@@ -62,6 +149,9 @@ public class HomeController {
         AtomicReference<Double> orgSceneY = new AtomicReference<>((double) 0);
         AtomicReference<Double> orgTranslateX = new AtomicReference<>((double) 0);
         AtomicReference<Double> orgTranslateY = new AtomicReference<>((double) 0);
+
+        Point2D localCircleCenter = stack.sceneToLocal(cal.localToScene(new Point2D(cal.getCenterX(), cal.getCenterY())));
+        circleCenter = new Point2D(localCircleCenter.getX(), localCircleCenter.getY());
 
         arc.setOnMousePressed((MouseEvent t) -> {
 
@@ -112,12 +202,10 @@ public class HomeController {
 
     }
 
-    public void changeDate(ActionEvent actionEvent) {
-    }
 
 
     @FXML
-    protected void addEvent(ActionEvent event) throws IOException {
+    protected void addEvent(ActionEvent event){
         try {
             AddController addController = new AddController(this);
             addController.show();
@@ -127,11 +215,10 @@ public class HomeController {
     }
 
     public boolean insideCircle(Arc arc){
-
-        Point2D localArcCenter = stack.sceneToLocal(arc.localToScene(new Point2D(arc.getCenterX(), arc.getCenterY())));
         Point2D localCircleCenter = stack.sceneToLocal(cal.localToScene(new Point2D(cal.getCenterX(), cal.getCenterY())));
         circleCenter = new Point2D(localCircleCenter.getX(), localCircleCenter.getY());
 
+        Point2D localArcCenter = stack.sceneToLocal(arc.localToScene(new Point2D(arc.getCenterX(), arc.getCenterY())));
         return circleCenter.distance(localArcCenter) + arc.getRadiusX() <= cal.getRadius();
 
     }
