@@ -41,7 +41,8 @@ public class LoginController {
 
     @FXML
     protected void onRegisterButtonClick(ActionEvent event) throws IOException {
-
+        RegisterController registerController = new RegisterController(this);
+        registerController.show();
     }
 
 

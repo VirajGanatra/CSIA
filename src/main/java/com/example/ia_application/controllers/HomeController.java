@@ -3,18 +3,20 @@ package com.example.ia_application.controllers;
 import com.example.ia_application.app.ArcWrapper;
 import com.example.ia_application.app.Event;
 import com.example.ia_application.app.SingleEvent;
+import com.example.ia_application.app.ToDoList;
+import com.example.ia_application.app.ToDoItem;
 import com.example.ia_application.defaults.DBClass;
 import com.example.ia_application.Driver;
-import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXDatePicker;
-import io.github.palexdev.materialfx.controls.MFXSlider;
+import io.github.palexdev.materialfx.controls.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -25,6 +27,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 
+import javax.naming.NamingEnumeration;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -33,22 +36,27 @@ import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class HomeController {
     private final Stage stage;
     private final com.example.ia_application.controllers.LoginController LoginController;
+    private Rectangle2D screenBounds;
 
-
+    public GridPane mainGrid;
     public Pane free;
     public Pane fixed;
     public MFXButton addButton;
+    public MFXButton toDoButton;
     public Arc arc1;
     public Arc arc15;
     public Arc arc5;
     public MFXSlider slide1;
     public MFXSlider slide5;
     public MFXSlider slide15;
+    public MFXRadioButton editToggle;
+    public MFXRadioButton deleteToggle;
     public MFXDatePicker datePicker;
     public StackPane stack;
     public Circle cal;
@@ -57,7 +65,11 @@ public class HomeController {
 
     Point2D circleCenter;
 
+    static final ToDoList toDoList = new ToDoList();
+    final ArrayList<Arc> arcList = new ArrayList<>();
+
     public HomeController(LoginController loginController){
+        toDoList.addToDoItem(new ToDoItem("Test", "Test", Duration.ofHours(1), true, false, "Test", LocalDate.now().plusDays(1)));
         this.LoginController = loginController;
         this.stage = new Stage();
         try{
@@ -65,10 +77,12 @@ public class HomeController {
             fxmlLoader.setLocation(getClass().getResource("/com/example/ia_application/home-view.fxml"));
             fxmlLoader.setController(this);
             stage.setScene(new Scene(fxmlLoader.load()));
+            stage.setMaximized(true);
             Driver.sceneStack.pushScene(stage.getScene());
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
 
 
     }
@@ -91,11 +105,98 @@ public class HomeController {
         });
 
         addButton.setOnAction(this::addEvent);
+        toDoButton.setOnAction(this::addToDo);
+
+        editToggle.setOnAction(this::editToggle);
+        deleteToggle.setOnAction(this::deleteToggle);
 
 
 
-
+        screenBounds = javafx.stage.Screen.getPrimary().getVisualBounds();
+        mainGrid.setMaxSize(screenBounds.getWidth(), screenBounds.getHeight());
     }
+
+
+    public void editToggle(ActionEvent actionEvent){
+        if (editToggle.isSelected()){
+            reset(deleteToggle);
+        } else {
+            makeArcDraggable(arc1);
+            makeArcDraggable(arc5);
+            makeArcDraggable(arc15);
+            for (Arc arc : arcList){
+                moveInside(arc);
+            }
+        }
+    }
+
+    public void deleteToggle(ActionEvent actionEvent){
+        if (deleteToggle.isSelected()){
+            reset(editToggle);
+            System.out.println(arcList);
+            for (Arc arc : arcList){
+                arc.setOnMouseClicked(event -> {
+                    arcList.remove(arc);
+                    free.getChildren().remove(arc);
+                });
+            }
+        } else {
+            makeArcDraggable(arc1);
+            makeArcDraggable(arc5);
+            makeArcDraggable(arc15);
+            for (Arc arc : arcList){
+                moveInside(arc);
+            }
+        }
+    }
+
+    private void reset(MFXRadioButton radio) {
+        radio.setSelected(false);
+        arc1.setOnMousePressed(null);
+        arc1.setOnMouseDragged(null);
+        arc1.setOnMouseReleased(null);
+        arc5.setOnMousePressed(null);
+        arc5.setOnMouseDragged(null);
+        arc5.setOnMouseReleased(null);
+        arc15.setOnMousePressed(null);
+        arc15.setOnMouseDragged(null);
+        arc15.setOnMouseReleased(null);
+        for (Arc arc : arcList){
+            arc.setOnMouseDragged(null);
+            arc.setOnMouseReleased(null);
+        }
+    }
+
+
+    public ToDoList getToDoList() {
+        return toDoList;
+    }
+
+    public void setToDoList(){
+        String sql = "SELECT * FROM toDo";
+        try{
+            Connection connection = DBClass.connection;
+            PreparedStatement prst = connection.prepareStatement(sql);
+            ResultSet resultSet = prst.executeQuery();
+            while (resultSet.next()){
+                String name = resultSet.getString("Name");
+                String description = resultSet.getString("Description");
+                String due = resultSet.getString("Due Date");
+                LocalDate date = LocalDate.parse(due);
+                String exp = resultSet.getString("Expected Time");
+                Duration time = Duration.parse(exp);
+                int imp = resultSet.getInt("Importance");
+                boolean importance = (imp == 1);
+                int comp = resultSet.getInt("Complete");
+                boolean status = (comp == 1);
+                String cat = resultSet.getString("Category");
+                toDoList.addToDoItem(new ToDoItem(name, description, time, importance, status, cat, date));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void show(){
         stage.showAndWait();
@@ -111,6 +212,8 @@ public class HomeController {
             prst.setLong(1, value);
             ResultSet resultSet = prst.executeQuery();
             while (resultSet.next()){
+                ArcWrapper arc = new ArcWrapper();
+                makeArcDraggable(arc);
                 String name = resultSet.getString("name");
                 String description = resultSet.getString("description");
                 String start = resultSet.getString("start time");
@@ -121,9 +224,13 @@ public class HomeController {
                 Event current = new SingleEvent(name, description, date, startTime, endTime);
                 double startAngle = (((double) startTime.toSecondOfDay() /60) * 0.25)+180;
                 double length = (double) duration.toMinutes() * 0.25;
-                Arc arctemp = new Arc(free.getLayoutX() + circleCenter.getX(), free.getLayoutY() + circleCenter.getY(), cal.getRadius(), cal.getRadius(), startAngle, length);
-                makeArcDraggable(arctemp);
-                ArcWrapper arc = new ArcWrapper(arctemp, current);
+                arc.setCenterX(free.getLayoutX() + circleCenter.getX());
+                arc.setCenterY(free.getLayoutY() + circleCenter.getY());
+                arc.setRadiusX(cal.getRadius());
+                arc.setRadiusY(cal.getRadius());
+                arc.setStartAngle(startAngle);
+                arc.setLength(length);
+                arc.setEvent(current);
                 arc.setFill(Color.GREEN);
                 arc.setType(ArcType.ROUND);
                 free.getChildren().add(arc);
@@ -181,6 +288,8 @@ public class HomeController {
                 newArc.setFill(arc.getFill());
                 newArc.setType(ArcType.ROUND);
                 free.getChildren().add(newArc);
+                System.out.println(free.getLayoutX() + "," + free.getLayoutY());
+                System.out.println(circleCenter.getX() + "," + circleCenter.getY());
                 /*Arc test = new Arc(free.getLayoutX() + circleCenter.getX(), free.getLayoutY() + circleCenter.getY(), cal.getRadius(), cal.getRadius(), 100, 45);
                 test.setFill(Color.GREEN);
                 test.setType(ArcType.ROUND);
@@ -197,9 +306,6 @@ public class HomeController {
 
         });
 
-
-
-
     }
 
 
@@ -208,6 +314,16 @@ public class HomeController {
     protected void addEvent(ActionEvent event){
         try {
             AddController addController = new AddController(this);
+            addController.show();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    protected void addToDo(ActionEvent event){
+        try {
+            ToDoController addController = new ToDoController(this);
             addController.show();
         } catch(Exception e) {
             e.printStackTrace();
@@ -225,6 +341,7 @@ public class HomeController {
 
 
     public void moveInside(Arc arc) {
+        arcList.add(arc);
         fixed.setMouseTransparent(true);
         arc.setOnMouseClicked((MouseEvent t) -> {
                     System.out.println("clicked");

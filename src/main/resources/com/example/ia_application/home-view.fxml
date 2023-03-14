@@ -1,60 +1,102 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--<?import com.gluonhq.charm.glisten.control.CardPane?>-->
+
 <?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXDatePicker?>
+<?import io.github.palexdev.materialfx.controls.MFXRadioButton?>
 <?import io.github.palexdev.materialfx.controls.MFXSlider?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Arc?>
 <?import javafx.scene.shape.Circle?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
-    <center>
-
-            <AnchorPane>
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="414.0" prefWidth="599.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <GridPane fx:id="mainGrid" prefHeight="244.0" prefWidth="607.0" HBox.hgrow="ALWAYS">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="427.20001220703125" minWidth="10.0" prefWidth="103.19999999999999" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="482.80000000000007" minWidth="10.0" prefWidth="440.2000244140625" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="273.60003662109375" minWidth="0.0" prefWidth="140.99997558593748" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="175.60001220703126" minHeight="10.0" prefHeight="117.59999389648436" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="297.6000122070312" minHeight="10.0" prefHeight="284.0000061035156" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <GridPane GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="257.79999389648435" minHeight="10.0" prefHeight="235.4" vgrow="SOMETIMES" />
+               </rowConstraints>
                <children>
-                  <StackPane fx:id="stack" layoutX="164.0" layoutY="117.0" prefHeight="242.0" prefWidth="271.0">
+                  <StackPane fx:id="stack" prefHeight="242.0" prefWidth="271.0">
                      <children>
                         <Circle fx:id="cal" fill="#1f93ff01" radius="100.0" stroke="BLACK" strokeType="INSIDE" />
                         <Pane fx:id="free" prefHeight="200.0" prefWidth="200.0" />
-                        <Pane fx:id="fixed" prefHeight="200.0" prefWidth="200.0" />
+                        <Pane fx:id="fixed" prefHeight="269.0" prefWidth="458.0" />
                      </children>
                   </StackPane>
-                  <MFXButton fx:id="addButton" layoutX="522.0" layoutY="55.0" text="Add" />
-                  <GridPane alignment="CENTER" layoutX="130.0" layoutY="35.0" prefHeight="92.0" prefWidth="354.0">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints maxHeight="52.799993896484374" minHeight="10.0" prefHeight="48.799993896484374" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="25.60001220703125" minHeight="8.000006103515624" prefHeight="12.000006103515624" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <Arc fx:id="arc15" fill="#1f93ffd5" length="60.0" radiusX="50.0" radiusY="50.0" startAngle="60.0" stroke="BLACK" strokeType="INSIDE" type="ROUND" />
-                        <Arc fx:id="arc1" fill="#f502e188" length="60.0" radiusX="50.0" radiusY="50.0" startAngle="60.0" stroke="BLACK" strokeType="INSIDE" type="ROUND" GridPane.columnIndex="1" />
-                        <Arc fx:id="arc5" fill="#8c21ffd9" length="60.0" radiusX="50.0" radiusY="50.0" startAngle="60.0" stroke="BLACK" strokeType="INSIDE" type="ROUND" GridPane.columnIndex="2" />
-                        <MFXSlider fx:id="slide15" max="300.0" min="15.0" showMajorTicks="true" showTicksAtEdges="false" sliderMode="SNAP_TO_TICKS" tickUnit="45.0" unitIncrement="45.0" GridPane.rowIndex="1" />
-                        <MFXSlider fx:id="slide1" max="300.0" min="15.0" showMajorTicks="true" showTicksAtEdges="false" sliderMode="SNAP_TO_TICKS" tickUnit="45.0" unitIncrement="45.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <MFXSlider fx:id="slide5" max="300.0" min="15.0" showMajorTicks="true" showTicksAtEdges="false" sliderMode="SNAP_TO_TICKS" tickUnit="45.0" unitIncrement="45.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                     </children>
-                  </GridPane>
-                  <MFXDatePicker fx:id="datePicker" layoutX="435.0" layoutY="150.0" prefHeight="38.0" prefWidth="118.0" />
                </children>
-            </AnchorPane>
-    </center>
-<!--   <left>-->
-<!--      <CardPane>-->
-<!--          <Label style="-fx-padding:10;" text="Home" />-->
-<!--          <Label style="-fx-padding:10;" text="Settings" />-->
-<!--      </CardPane>-->
-<!--   </left>-->
-</BorderPane>
+            </GridPane>
+            <VBox prefHeight="256.0" prefWidth="96.0" GridPane.rowIndex="1" />
+            <GridPane alignment="CENTER" prefHeight="106.0" prefWidth="450.0" GridPane.columnIndex="1">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="52.799993896484374" minHeight="10.0" prefHeight="48.799993896484374" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="25.60001220703125" minHeight="8.000006103515624" prefHeight="12.000006103515624" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Arc fx:id="arc15" fill="#1f93ffd5" length="60.0" radiusX="50.0" radiusY="50.0" startAngle="60.0" stroke="BLACK" strokeType="INSIDE" type="ROUND" GridPane.halignment="CENTER" />
+                  <Arc fx:id="arc1" fill="#f502e188" length="60.0" radiusX="50.0" radiusY="50.0" startAngle="60.0" stroke="BLACK" strokeType="INSIDE" type="ROUND" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                  <Arc fx:id="arc5" fill="#8c21ffd9" length="60.0" radiusX="50.0" radiusY="50.0" startAngle="60.0" stroke="BLACK" strokeType="INSIDE" type="ROUND" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+                  <MFXSlider fx:id="slide15" max="300.0" min="15.0" showMajorTicks="true" showTicksAtEdges="false" sliderMode="SNAP_TO_TICKS" tickUnit="45.0" unitIncrement="45.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <MFXSlider fx:id="slide1" max="300.0" min="15.0" showMajorTicks="true" showTicksAtEdges="false" sliderMode="SNAP_TO_TICKS" tickUnit="45.0" unitIncrement="45.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <MFXSlider fx:id="slide5" max="300.0" min="15.0" showMajorTicks="true" showTicksAtEdges="false" sliderMode="SNAP_TO_TICKS" tickUnit="45.0" unitIncrement="45.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+               </children>
+            </GridPane>
+            <MFXButton fx:id="addButton" text="Add" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+            <GridPane layoutX="568.0" layoutY="128.0" GridPane.rowIndex="1">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <MFXRadioButton fx:id="editToggle" contentDisposition="TOP" text="Edit" GridPane.halignment="CENTER" />
+                  <MFXRadioButton fx:id="deleteToggle" contentDisposition="TOP" text="Delete" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+               </children>
+            </GridPane>
+            <GridPane GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <MFXDatePicker fx:id="datePicker" prefHeight="38.0" prefWidth="140.0" GridPane.halignment="CENTER" />
+                  <MFXButton fx:id="toDoButton" text="To Do" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+               </children>
+            </GridPane>
+            <MFXButton fx:id="report" text="Report" />
+         </children>
+      </GridPane>
+   </children>
+</HBox>

@@ -1,4 +1,10 @@
 package com.example.ia_application.app;
+import com.example.ia_application.defaults.DBClass;
+import com.example.ia_application.defaults.DBTablePrinter;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -85,8 +91,31 @@ public class ToDoItem {
         return LocalDateTime.now();
     }
 
-    public SingleEvent Event(){
-        return new SingleEvent();
+    public SingleEvent toEvent(){
+        return new SingleEvent(name, description, dueDate, suggestTime().toLocalTime(), expectedTime);
     }
+
+    public void addToDB(){
+        String sql = "INSERT INTO toDo (name, description, 'Expected Time', 'Importance', Complete, Category, 'Due Date') VALUES(?,?,?,?,?,?,?)";
+
+        try (Connection connection = DBClass.connection;){
+            assert connection != null;
+            try (PreparedStatement prst = connection.prepareStatement(sql);){
+                prst.setString(1, this.getName());
+                prst.setString(2, this.getDescription());
+                prst.setString(3, this.getExpectedTime().toString());
+                prst.setInt(4, this.getImportanceFlag()? 1 : 0);
+                prst.setInt(5, this.isComplete()? 1 : 0);
+                prst.setString(6, this.getCategory());
+                prst.setLong(7, this.getDueDate().toEpochDay());
+                prst.executeUpdate();
+                DBTablePrinter.printTable(connection, "toDo");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
 
