@@ -55,6 +55,11 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>eu.hansolo.fx</groupId>
+            <artifactId>charts</artifactId>
+            <version>17.1.27</version>
+        </dependency>
     </dependencies>
 
     <build>

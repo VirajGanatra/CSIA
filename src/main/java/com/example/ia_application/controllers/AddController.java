@@ -1,6 +1,7 @@
 package com.example.ia_application.controllers;
 
 
+import com.example.ia_application.app.SceneStack;
 import com.example.ia_application.app.SingleEvent;
 import com.example.ia_application.Driver;
 import com.example.ia_application.defaults.Template;
@@ -14,6 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
@@ -30,15 +32,20 @@ public class AddController {
     public MFXButton add;
     final HomeController homeController;
 
+    private LocalDate date;
 
-    public AddController(HomeController homeController){
+
+    public AddController(HomeController homeController, LocalDate date){
         this.homeController = homeController;
+        this.date = date;
         this.stage = new Stage();
         try{
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("/com/example/ia_application/add-view.fxml"));
             fxmlLoader.setController(this);
-            stage.setScene(new Scene(fxmlLoader.load()));
+            Scene scene = new Scene(fxmlLoader.load());
+            stage.setScene(scene);
+            scene.setUserData(this);
             Driver.sceneStack.pushScene(stage.getScene());
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,11 +74,15 @@ public class AddController {
         currentEvent.setStartTime(LocalTime.parse(startH.getValue().toString() + ":" + startM.getValue().toString(), formatter));
         currentEvent.setEndTime(LocalTime.parse(endH.getValue().toString() + ":" + endM.getValue().toString(), formatter));
         currentEvent.setDuration();
-        currentEvent.setStartDate(homeController.datePicker.getValue());
+        currentEvent.setStartDate(date);
+        System.out.println(currentEvent.getStartDate());
         currentEvent.addToDB();
 
         Driver.sceneStack.popScene();
-        stage.setScene(Driver.sceneStack.peekScene());
+        Scene newScene = Driver.sceneStack.peekScene();
+        //homeController.loadCalendar(LocalDate.now());
+        newScene.setUserData(this);
+        stage.setScene(newScene);
     }
 
     public void recClick(ActionEvent actionEvent) {

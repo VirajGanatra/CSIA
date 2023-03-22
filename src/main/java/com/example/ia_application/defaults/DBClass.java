@@ -15,7 +15,7 @@ public class DBClass {
     public static final String location = Objects.requireNonNull(Driver.class.getResource("events.db")).toExternalForm();
     public static final Connection connection = connect();
 
-    static Connection connect() {
+    public static Connection connect() {
         String dbPrefix = "jdbc:sqlite:";
         Connection connection;
         try {

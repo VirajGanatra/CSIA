@@ -43,6 +43,7 @@ public class SceneStack {
             Scene scene = top.scene;
             top = top.below;
             size--;
+            scene.getWindow().hide();
             return scene;
         }
     }

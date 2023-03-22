@@ -8,6 +8,8 @@ import io.github.palexdev.materialfx.validation.Constraint;
 import io.github.palexdev.materialfx.validation.MFXValidator;
 import io.github.palexdev.materialfx.validation.Validated;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanExpression;
+import javafx.beans.value.ObservableBooleanValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,8 +32,8 @@ import java.util.ResourceBundle;
 public class RegisterController implements Initializable {
     private final MFXTextField loginField;
     private final MFXPasswordField passwordField;
-    private final MFXTextField firstNameField;
-    private final MFXTextField lastNameField;
+    private final MFXTextField nameField;
+    private final MFXTextField emailField;
     private final MFXComboBox<String> genderCombo;
     private final MFXCheckbox checkbox;
 
@@ -48,8 +50,8 @@ public class RegisterController implements Initializable {
         this.stage = new Stage();
         this.loginField = new MFXTextField();
         this.passwordField = new MFXPasswordField();
-        this.firstNameField = new MFXTextField();
-        this.lastNameField = new MFXTextField();
+        this.nameField = new MFXTextField();
+        this.emailField = new MFXTextField();
         this.genderCombo = new MFXComboBox<>();
         this.checkbox = new MFXCheckbox("Confirm Data?");
         try{
@@ -70,14 +72,15 @@ public class RegisterController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        loginField.setPromptText("Username...");
+        loginField.setPromptText("Username");
         loginField.getValidator().constraint("The username must be at least 6 characters long", loginField.textProperty().length().greaterThanOrEqualTo(6));
         loginField.setLeadingIcon(new MFXIconWrapper("mfx-user", 16, Color.web("#4D4D4D"), 24));
         passwordField.getValidator().constraint("The password must be at least 8 characters long", passwordField.textProperty().length().greaterThanOrEqualTo(8));
-        passwordField.setPromptText("Password...");
+        passwordField.setPromptText("Password");
+        genderCombo.setItems(FXCollections.observableArrayList("Male", "Female", "Other"));
+        nameField.setPromptText("Name");
+        emailField.setPromptText("email");
 
-        firstNameField.setPromptText("First Name...");
-        lastNameField.setPromptText("Last Name...");
 
         List<MFXStepperToggle> stepperToggles = createSteps();
         stepper.getStepperToggles().addAll(stepperToggles);
@@ -96,7 +99,7 @@ public class RegisterController implements Initializable {
         step1.getValidator().dependsOn(loginField.getValidator()).dependsOn(passwordField.getValidator());
 
         MFXStepperToggle step2 = new MFXStepperToggle("Step 2", new MFXFontIcon("mfx-user", 16, Color.web("#49a6d7")));
-        VBox step2Box = new VBox(20, firstNameField, lastNameField, genderCombo);
+        VBox step2Box = new VBox(20, nameField, emailField, genderCombo);
         step2Box.setAlignment(Pos.CENTER);
         step2.setContent(step2Box);
 
@@ -146,13 +149,13 @@ public class RegisterController implements Initializable {
         MFXTextField usernameLabel2 = createLabel("");
         usernameLabel2.textProperty().bind(loginField.textProperty());
 
-        MFXTextField firstNameLabel1 = createLabel("First Name: ");
-        MFXTextField firstNameLabel2 = createLabel("");
-        firstNameLabel2.textProperty().bind(firstNameField.textProperty());
+        MFXTextField NameLabel1 = createLabel("First Name: ");
+        MFXTextField NameLabel2 = createLabel("");
+        NameLabel2.textProperty().bind(nameField.textProperty());
 
-        MFXTextField lastNameLabel1 = createLabel("Last Name: ");
-        MFXTextField lastNameLabel2 = createLabel("");
-        lastNameLabel2.textProperty().bind(lastNameField.textProperty());
+        MFXTextField emailLabel1 = createLabel("Last Name: ");
+        MFXTextField emailLabel2 = createLabel("");
+        emailLabel2.textProperty().bind(emailField.textProperty());
 
         MFXTextField genderLabel1 = createLabel("Gender: ");
         MFXTextField genderLabel2 = createLabel("");
@@ -162,16 +165,16 @@ public class RegisterController implements Initializable {
         ));
 
         usernameLabel1.getStyleClass().add("header-label");
-        firstNameLabel1.getStyleClass().add("header-label");
-        lastNameLabel1.getStyleClass().add("header-label");
+        NameLabel1.getStyleClass().add("header-label");
+        emailLabel1.getStyleClass().add("header-label");
         genderLabel1.getStyleClass().add("header-label");
 
         MFXTextField completedLabel = MFXTextField.asLabel("Completed!");
         completedLabel.getStyleClass().add("completed-label");
 
         HBox b1 = new HBox(usernameLabel1, usernameLabel2);
-        HBox b2 = new HBox(firstNameLabel1, firstNameLabel2);
-        HBox b3 = new HBox(lastNameLabel1, lastNameLabel2);
+        HBox b2 = new HBox(NameLabel1, NameLabel2);
+        HBox b3 = new HBox(emailLabel1, emailLabel2);
         HBox b4 = new HBox(genderLabel1, genderLabel2);
 
         b1.setMaxWidth(Region.USE_PREF_SIZE);
@@ -184,8 +187,8 @@ public class RegisterController implements Initializable {
         StackPane.setAlignment(box, Pos.CENTER);
 
         stepper.setOnLastNext(event -> {
-            box.getChildren().setAll(completedLabel);
-            stepper.setMouseTransparent(true);
+            HomeController homeController = new HomeController(this.loginController);
+            homeController.show();
         });
         stepper.setOnBeforePrevious(event -> {
             if (stepper.isLastToggle()) {

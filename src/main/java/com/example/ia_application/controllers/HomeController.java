@@ -7,9 +7,10 @@ import com.example.ia_application.app.ToDoList;
 import com.example.ia_application.app.ToDoItem;
 import com.example.ia_application.defaults.DBClass;
 import com.example.ia_application.Driver;
+import com.example.ia_application.defaults.DBTablePrinter;
 import io.github.palexdev.materialfx.controls.*;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
@@ -24,11 +25,8 @@ import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 
-import javax.naming.NamingEnumeration;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -37,11 +35,12 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class HomeController {
     private final Stage stage;
-    private final com.example.ia_application.controllers.LoginController LoginController;
+    private final com.example.ia_application.controllers.LoginController loginController;
     private Rectangle2D screenBounds;
 
     public GridPane mainGrid;
@@ -49,6 +48,7 @@ public class HomeController {
     public Pane fixed;
     public MFXButton addButton;
     public MFXButton toDoButton;
+    public MFXButton reportButton;
     public Arc arc1;
     public Arc arc15;
     public Arc arc5;
@@ -62,6 +62,8 @@ public class HomeController {
     public Circle cal;
     public ArcWrapper newArc;
     public Event currentEvent;
+    private HashMap<Arc, MFXSlider> arcSliderMap = new HashMap<>();
+
 
     Point2D circleCenter;
 
@@ -69,20 +71,22 @@ public class HomeController {
     final ArrayList<Arc> arcList = new ArrayList<>();
 
     public HomeController(LoginController loginController){
+        loginController.getStage().close();
         toDoList.addToDoItem(new ToDoItem("Test", "Test", Duration.ofHours(1), true, false, "Test", LocalDate.now().plusDays(1)));
-        this.LoginController = loginController;
+        this.loginController = loginController;
         this.stage = new Stage();
         try{
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getResource("/com/example/ia_application/home-view.fxml"));
             fxmlLoader.setController(this);
             stage.setScene(new Scene(fxmlLoader.load()));
-            stage.setMaximized(true);
+            //stage.setMaximized(true);
             Driver.sceneStack.pushScene(stage.getScene());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
+
 
 
     }
@@ -90,11 +94,13 @@ public class HomeController {
 
     public void initialize() {
 
-        datePicker.setValue(LocalDate.now());
 
         makeArcDraggable(arc15);
         makeArcDraggable(arc1);
         makeArcDraggable(arc5);
+        arcSliderMap.put(arc1, slide1);
+        arcSliderMap.put(arc5, slide5);
+        arcSliderMap.put(arc15, slide15);
 
 //        stage.addEventHandler(WindowEvent.WINDOW_SHOWING, window -> {
 //            loadCalendar(datePicker.getValue());
@@ -106,6 +112,7 @@ public class HomeController {
 
         addButton.setOnAction(this::addEvent);
         toDoButton.setOnAction(this::addToDo);
+        reportButton.setOnAction(this::report);
 
         editToggle.setOnAction(this::editToggle);
         deleteToggle.setOnAction(this::deleteToggle);
@@ -114,7 +121,37 @@ public class HomeController {
 
         screenBounds = javafx.stage.Screen.getPrimary().getVisualBounds();
         mainGrid.setMaxSize(screenBounds.getWidth(), screenBounds.getHeight());
+
+        stage.sceneProperty().addListener((observable, oldScene, newScene) -> {
+            System.out.println(oldScene!=null);
+            System.out.println(oldScene.getUserData());
+            if (oldScene != null && oldScene.getUserData() instanceof AddController) {
+                // Navigated from the Two controller
+//                if (DBClass.connection == null) {
+//                    DBClass.connect();
+//                }
+                loadCalendar(LocalDate.now());
+                System.out.println("Navigated from the Add controller");
+            } else {
+                // Navigated from the One controller
+                System.out.println("Navigated from the OTHER controller");
+            }
+        });
+
+        Platform.runLater(new Runnable() {
+            @Override public void run() {
+
+                loadCalendar(LocalDate.now());
+            }
+        });
     }
+
+    private void report(ActionEvent actionEvent) {
+        ReportController reportController = new ReportController(this);
+        reportController.show();
+
+    }
+
 
 
     public void editToggle(ActionEvent actionEvent){
@@ -199,6 +236,7 @@ public class HomeController {
 
 
     public void show(){
+        //loadCalendar(LocalDate.now());
         stage.showAndWait();
     }
 
@@ -206,12 +244,17 @@ public class HomeController {
         long value = date.toEpochDay();
 
         String singleSQL = "SELECT * FROM single WHERE date = (?)";
+        System.out.println(singleSQL);
         try {
             Connection connection = DBClass.connection;
+            assert connection != null;
             PreparedStatement prst = connection.prepareStatement(singleSQL);
+            //System.out.println(prst);
+            //System.out.println(prst.toString());
             prst.setLong(1, value);
             ResultSet resultSet = prst.executeQuery();
             while (resultSet.next()){
+                //System.out.println(resultSet.getString("name"));
                 ArcWrapper arc = new ArcWrapper();
                 makeArcDraggable(arc);
                 String name = resultSet.getString("name");
@@ -225,6 +268,8 @@ public class HomeController {
                 double startAngle = (((double) startTime.toSecondOfDay() /60) * 0.25)+180;
                 double length = (double) duration.toMinutes() * 0.25;
                 arc.setCenterX(free.getLayoutX() + circleCenter.getX());
+                System.out.println(free.getLayoutX());
+                System.out.println(circleCenter.getX());
                 arc.setCenterY(free.getLayoutY() + circleCenter.getY());
                 arc.setRadiusX(cal.getRadius());
                 arc.setRadiusY(cal.getRadius());
@@ -236,7 +281,8 @@ public class HomeController {
                 free.getChildren().add(arc);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            DBClass.connect();
+            loadCalendar(date);
         }
 
         /*String recurringSQL = "SELECT * FROM recurring WHERE date = (?)";
@@ -259,6 +305,7 @@ public class HomeController {
 
         Point2D localCircleCenter = stack.sceneToLocal(cal.localToScene(new Point2D(cal.getCenterX(), cal.getCenterY())));
         circleCenter = new Point2D(localCircleCenter.getX(), localCircleCenter.getY());
+        System.out.println(circleCenter);
 
         arc.setOnMousePressed((MouseEvent t) -> {
 
@@ -283,8 +330,14 @@ public class HomeController {
         arc.setOnMouseReleased((MouseEvent t) -> {
             arc.setMouseTransparent(true);
             if (insideCircle(arc)) {
-
-                ArcWrapper newArc = new ArcWrapper(free.getLayoutX() + circleCenter.getX(), free.getLayoutY() + circleCenter.getY(), cal.getRadius(), cal.getRadius(), 0, 60);
+                double value = arcSliderMap.get(arc).getValue();
+                if (value%15 == 0){
+                    value = (value/1440)*360;
+                } else {
+                    value = (value/24)*360;
+                }
+                ArcWrapper newArc = genArc(value);
+                System.out.println(value);
                 newArc.setFill(arc.getFill());
                 newArc.setType(ArcType.ROUND);
                 free.getChildren().add(newArc);
@@ -308,12 +361,16 @@ public class HomeController {
 
     }
 
-
+    public ArcWrapper genArc(double value){
+        System.out.println(free.getLayoutX() + "," + free.getLayoutY());
+        System.out.println(circleCenter.getX() + "," + circleCenter.getY());
+        return new ArcWrapper(free.getLayoutX() + circleCenter.getX(), free.getLayoutY() + circleCenter.getY(), cal.getRadius(), cal.getRadius(), 90, value);
+    }
 
     @FXML
     protected void addEvent(ActionEvent event){
         try {
-            AddController addController = new AddController(this);
+            AddController addController = new AddController(this, datePicker.getValue());
             addController.show();
         } catch(Exception e) {
             e.printStackTrace();
@@ -350,6 +407,7 @@ public class HomeController {
         arc.setOnMouseDragged((MouseEvent t1) -> {
                 double angle = Math.atan2(t1.getY() - cal.getCenterY(), t1.getX() - cal.getCenterX()) * 180 / Math.PI;
                 arc.setStartAngle(-angle - 30);
+
         });
 
         arc.setOnMouseReleased((MouseEvent t1) -> {

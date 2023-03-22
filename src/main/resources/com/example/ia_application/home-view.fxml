@@ -61,9 +61,9 @@
                   <Arc fx:id="arc15" fill="#1f93ffd5" length="60.0" radiusX="50.0" radiusY="50.0" startAngle="60.0" stroke="BLACK" strokeType="INSIDE" type="ROUND" GridPane.halignment="CENTER" />
                   <Arc fx:id="arc1" fill="#f502e188" length="60.0" radiusX="50.0" radiusY="50.0" startAngle="60.0" stroke="BLACK" strokeType="INSIDE" type="ROUND" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
                   <Arc fx:id="arc5" fill="#8c21ffd9" length="60.0" radiusX="50.0" radiusY="50.0" startAngle="60.0" stroke="BLACK" strokeType="INSIDE" type="ROUND" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
-                  <MFXSlider fx:id="slide15" max="300.0" min="15.0" showMajorTicks="true" showTicksAtEdges="false" sliderMode="SNAP_TO_TICKS" tickUnit="45.0" unitIncrement="45.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                  <MFXSlider fx:id="slide1" max="300.0" min="15.0" showMajorTicks="true" showTicksAtEdges="false" sliderMode="SNAP_TO_TICKS" tickUnit="45.0" unitIncrement="45.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                  <MFXSlider fx:id="slide5" max="300.0" min="15.0" showMajorTicks="true" showTicksAtEdges="false" sliderMode="SNAP_TO_TICKS" tickUnit="45.0" unitIncrement="45.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <MFXSlider fx:id="slide15" max="45.0" min="15.0" minorTicksCount="0" showMajorTicks="true" showTicksAtEdges="false" sliderMode="SNAP_TO_TICKS" tickUnit="15.0" unitIncrement="15.0" value="15.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <MFXSlider fx:id="slide1" max="4.0" min="1.0" showMajorTicks="true" showTicksAtEdges="false" sliderMode="SNAP_TO_TICKS" tickUnit="1.0" unitIncrement="1.0" value="1.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <MFXSlider fx:id="slide5" max="20.0" min="5.0" showMajorTicks="true" showTicksAtEdges="false" sliderMode="SNAP_TO_TICKS" tickUnit="5.0" unitIncrement="5.0" value="5.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                </children>
             </GridPane>
             <MFXButton fx:id="addButton" text="Add" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
@@ -95,7 +95,7 @@
                   <MFXButton fx:id="toDoButton" text="To Do" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                </children>
             </GridPane>
-            <MFXButton fx:id="report" text="Report" />
+            <MFXButton fx:id="reportButton" text="Report" />
          </children>
       </GridPane>
    </children>
