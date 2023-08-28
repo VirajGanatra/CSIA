@@ -9,6 +9,9 @@ A video demonstration was produced of the project, and is attached below.
 The calendar implements recurring events and a weekly report, as well as the adding and removing of single events. 
 
 
+https://github.com/VirajGanatra/Circular-Calendar/assets/54398386/4c54300a-4c1a-48bb-8935-9c8b4d7a03f9
+
+
 
 
 
